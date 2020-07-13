@@ -13,7 +13,7 @@
 
 {% block beforeContent %}
   {{ govukBackLink({
-    href: "#",
+    href: previous_path,
     text: "Back"
   }) }}
 
@@ -23,9 +23,6 @@
     <div class="govuk-grid-column-two-thirds">
       {% block form_content %}
       {% endblock %}
-      {{ govukButton({
-        'text': "Continue"
-      }) }}
     </div>
   </div>
 {% endblock %}

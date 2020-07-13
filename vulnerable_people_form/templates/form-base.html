@@ -1,0 +1,21 @@
+{%- from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary -%}
+
+{% extends "base.html" %}
+
+{% block form_content %}
+    <form method="post">
+        {% if error_list != None and error_list|length > 0 %}
+            {{ govukErrorSummary({
+              "titleText": "There is a problem",
+              "errorList": error_list            
+             }) }}
+        {% endif %}
+        {% block form_fields %}
+        {% endblock %}
+        {{ govukButton({
+          "text": "Continue",
+          "type": "Submit",
+          "preventDoubleClick": true,
+        }) }}
+    </form>
+{% endblock %}
