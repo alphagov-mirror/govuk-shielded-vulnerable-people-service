@@ -9,6 +9,7 @@ form = Blueprint("form", __name__)
 
 def update_session_answers_from_form():
     session["form_answers"] = {**session.setdefault("form_answers", {}), **request.form}
+    session["error_items"] = {}
 
 
 def form_answers():
