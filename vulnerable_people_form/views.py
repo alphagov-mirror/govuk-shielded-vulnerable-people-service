@@ -75,6 +75,7 @@ def get_live_in_england():
         radio_items=get_radio_options_from_enum(
             LiveInEnglandAnswers, form_answers().get("live_in_england")
         ),
+        previous_path="/",
         **get_errors_from_session("live_in_england"),
     )
 
@@ -123,7 +124,8 @@ def get_nhs_letter():
         radio_items=get_radio_options_from_enum(
             NHSLetterAnswers, form_answers().get("nhs_letter")
         ),
-        previous_path="/" ** get_errors_from_session("nhs_letter"),
+        previous_path="/live-in-england",
+        **get_errors_from_session("nhs_letter"),
     )
 
 
