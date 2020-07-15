@@ -351,3 +351,45 @@ def get_postcode_lookup():
         **get_errors_from_session("postcode"),
     )
 
+
+def validate_support_address():
+    value = all(
+        [
+            validate_mandatory_form_field(
+                "support_address",
+                "building_and_street_line_1",
+                "Enter a building and street",
+            ),
+            validate_mandatory_form_field(
+                "support_address", "town_city", "Enter a town or city"
+            ),
+            validate_postcode("support_address"),
+        ]
+    )
+    print(value)
+    return value
+
+
+@form.route("/support-address", methods=["POST"])
+def post_support_address():
+    session["form_answers"] = {
+        **session.setdefault("form_answers", {}),
+        "support_address": {**request.form},
+    }
+    session["error_items"] = {}
+    if not validate_support_address():
+        print(session["error_items"])
+        return redirect("/support-address")
+
+    return redirect("/contact-details")
+
+
+@form.route("/support-address", methods=["GET"])
+def get_support_address():
+    return render_template(
+        "support-address.html",
+        previous_path="/name",
+        values=form_answers().get("support_address", {}),
+        **get_errors_from_session("support_address"),
+    )
+
