@@ -174,7 +174,6 @@ def get_medical_conditions():
 
 
 def validate_mandatory_form_field(section_key, value_key, error_message):
-    print(request.form.get(value_key))
     if not request.form.get(value_key):
         existing_section = session.setdefault("error_items", {}).setdefault(
             section_key, {}
@@ -244,13 +243,9 @@ def failing_field(field_bools, field_names):
 
 
 def validate_date_of_birth():
-    print(request.form)
     day = request.form.get("day", "")
     month = request.form.get("month", "")
     year = request.form.get("year", "")
-    print(day)
-    print(month)
-    print(year)
 
     fields = [month, day, year]
     fieldsEmpty = [period == "" for period in fields]
@@ -258,9 +253,6 @@ def validate_date_of_birth():
     fieldsNotPositiveInt = [not isPositiveInt(period) for period in fields]
     fieldNames = ("month", "day", "year")
 
-    print(fieldsEmpty)
-    print(fieldsNotNumbers)
-    print(fieldsNotPositiveInt)
     error = None
     if all(fieldsEmpty):
         error = "Enter your date of birth"
@@ -426,7 +418,6 @@ def validate_support_address():
             validate_postcode("support_address"),
         ]
     )
-    print(value)
     return value
 
 
@@ -438,7 +429,6 @@ def post_support_address():
     }
     session["error_items"] = {}
     if not validate_support_address():
-        print(session["error_items"])
         return redirect("/support-address")
 
     return redirect("/contact-details")
@@ -448,7 +438,7 @@ def post_support_address():
 def get_support_address():
     return render_template(
         "support-address.html",
-        previous_path="/name",
+        previous_path="/address-lookup",
         values=form_answers().get("support_address", {}),
         **get_errors_from_session("support_address"),
     )
@@ -523,7 +513,6 @@ def post_contact_details():
     }
     session["error_items"] = {}
     if not validate_contact_details():
-        print(session["error_items"])
         return redirect("/contact-details")
 
     return redirect("/check-contact-details")
@@ -537,4 +526,3 @@ def get_contact_details():
         values=form_answers().get("contact_details", {}),
         **get_errors_from_session("contact_details"),
     )
-
