@@ -1,6 +1,14 @@
 {%- from "govuk_frontend_jinja/components/error-summary/macro.html" import govukErrorSummary -%}
+{%- from 'govuk_frontend_jinja/components/back-link/macro.html' import govukBackLink -%}
 
 {% extends "base.html" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    "href": previous_path,
+    "text": "Back"
+  }) }}
+{% endblock %}
 
 {% block centered_content %}
     <form method="post" novalidate>
