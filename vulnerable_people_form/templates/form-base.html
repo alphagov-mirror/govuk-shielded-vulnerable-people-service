@@ -2,7 +2,7 @@
 
 {% extends "base.html" %}
 
-{% block form_content %}
+{% block centered_content %}
     <form method="post" novalidate>
         {% if error_list != None and error_list|length > 0 %}
             {{ govukErrorSummary({
