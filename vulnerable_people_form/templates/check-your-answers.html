@@ -1,25 +1,12 @@
-{%- from "govuk_frontend_jinja/components/breadcrumbs/macro.html" import govukBreadcrumbs -%}
 {%- from "govuk_frontend_jinja/components/summary-list/macro.html" import govukSummaryList -%}
 
-{% extends "base.html" %}
-
-{% block beforeContent %}
-    {{ govukBreadcrumbs({
-      "collapseOnMobile": true,
-      "items": [
-        {
-          "text": "Home",
-          "href": "/"
-        },
-      ]
-    }) }}
-{% endblock %}
+{% extends "base-with-home-breadcrumb.html" %}
 
 {% block centered_content %}
   <h1 class="govuk-heading-xl govuk-!-margin-top-0 govuk-!-margin-bottom-3">
     {{ title_text }}
-</h1>
-          <p class="govuk-body"> Check your answers first.</p>
+  </h1>
+  <p class="govuk-body"> Check your answers first.</p>
     {{ govukSummaryList({
       "rows": summary_rows,
     }) }}
