@@ -122,6 +122,11 @@ def validate_live_in_england():
     )
 
 
+@form.route("/start", methods=["GET"])
+def get_start():
+    return redirect("/live-in-england")
+
+
 @form.route("/live-in-england", methods=["GET"])
 def get_live_in_england():
     return render_template_with_title(
