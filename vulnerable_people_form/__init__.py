@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect
 
 from . import views
+from . import form_response_model
 
 
 def create_app(config_filename):
@@ -18,6 +19,7 @@ def create_app(config_filename):
         ]
     )
 
+    form_response_model.create_tables_if_not_exist()
     app.register_blueprint(views.form)
     CSRFProtect(app)
     return app
