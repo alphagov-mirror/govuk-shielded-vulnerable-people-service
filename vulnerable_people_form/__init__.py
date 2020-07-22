@@ -1,5 +1,7 @@
 from jinja2 import ChoiceLoader, PackageLoader, PrefixLoader
 from flask import Flask, render_template
+from flask_wtf.csrf import CSRFProtect
+
 from . import views
 
 
@@ -17,4 +19,5 @@ def create_app(config_filename):
     )
 
     app.register_blueprint(views.form)
+    CSRFProtect(app)
     return app
