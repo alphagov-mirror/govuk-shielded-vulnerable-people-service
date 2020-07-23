@@ -58,12 +58,16 @@ def address_builder(lpi_info):
 
     return {
         "uprn": lpi_info.get("UPRN", ""),
-        "street": lpi_info.get("STREET_DESCRIPTION", ""),
-        "town_city": address_line_builder(lpi_info, ["LOCALITY_NAME", "TOWN_NAME"]),
-        "county": address_line_builder(lpi_info, ["ADMINISTRATIVE_AREA", "AREA_NAME"]),
+        "street": lpi_info.get("STREET_DESCRIPTION", "").title(),
+        "town_city": address_line_builder(
+            lpi_info, ["LOCALITY_NAME", "TOWN_NAME"]
+        ).title(),
+        "county": address_line_builder(
+            lpi_info, ["ADMINISTRATIVE_AREA", "AREA_NAME"]
+        ).title(),
         "postcode": lpi_info.get("POSTCODE_LOCATOR"),
-        "building_and_street_line_1": building_and_street_line_1,
-        "building_and_street_line_2": building_and_street_line_2,
+        "building_and_street_line_1": building_and_street_line_1.title(),
+        "building_and_street_line_2": building_and_street_line_2.title(),
     }
 
 
