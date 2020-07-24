@@ -929,7 +929,7 @@ def get_check_your_answers():
 @form.route("/check-your-answers", methods=["POST"])
 def post_check_your_answers():
     answers = form_answers()
-    with open(os.path.join(current_app.root_path, "ansers_schema.json")) as fh:
+    with open(os.path.join(current_app.root_path, "answers_schema.json")) as fh:
         schema = json.load(fh)
     try:
         jsonschema.validate(instance=answers, schema=schema)
