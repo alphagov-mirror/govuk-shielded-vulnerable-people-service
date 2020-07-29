@@ -54,6 +54,28 @@ PAGE_TITLES = {
 }
 
 
+FORM_PAGE_TO_DATA_CHECK_SECTION_NAME = {
+    "address-lookup": "support_address",
+    "applying-on-own-behalf": "applying_on_own_behalf",
+    "basic-care-needs": "basic_care_needs",
+    "carry-supplies": "carry_supplies",
+    "check-contact-details": "check_contact_details",
+    "check-your-answers": "check_you_answers",
+    "contact-details": "contact_details",
+    "date-of-birth": "date_of_birth",
+    "dietary-requirements": "dietary_requirements",
+    "essential-supplies": "essential_supplies",
+    "live-in-england": "live_in_england",
+    "medical-conditions": "medical_conditions",
+    "name": "name",
+    "nhs-letter": "nhs_letter",
+    "nhs-login": "nhs_login",
+    "nhs-number": "nhs_number",
+    "postcode-lookup": "support_address",
+    "support-address": "support_address",
+}
+
+
 def blank_form_sections(*sections_to_blank):
     session["form_answers"] = {
         section: {**answers} if isinstance(answers, dict) else answers
@@ -64,9 +86,11 @@ def blank_form_sections(*sections_to_blank):
 
 def redirect_to_next_form_page(redirect_target=True):
     next_page_has_answer = (
-        form_answers().get(redirect_target.strip("/").replace("-", "_")) is not None
+        form_answers().get(
+            FORM_PAGE_TO_DATA_CHECK_SECTION_NAME[redirect_target.strip("/")]
+        )
+        is not None
     )
-    print(next_page_has_answer)
     if session.get("check_answers_page_seen") and next_page_has_answer:
         return redirect("/check-your-answers")
 
