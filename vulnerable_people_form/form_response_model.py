@@ -9,7 +9,7 @@ from flask import current_app
 
 def get_dynamodb_client():
     return boto3.resource(
-        "dynamodb", endpoint_url=current_app.config.get("AWS_ENDPOINT_URL")
+        "dynamodb", endpoint_url=current_app.config.get("LOCAL_AWS_ENDPOINT_URL")
     )
 
 
@@ -23,9 +23,10 @@ def generate_reference_number():
     return f'{datetime.datetime.now().strftime("%Y%m%d-%H%M%S")}-{secrets.token_hex(3)}'
 
 
-def write_answers_to_table(answers):
+def write_answers_to_table(nhs_sub, answers):
     get_dynamodb_client().Table(_form_response_tablename()).put_item(
         Item={
+            "NHSSub": nhs_sub,
             "ReferenceId": generate_reference_number(),
             "UnixTimestamp": decimal.Decimal(time.time()),
             "FormResponse": answers,
@@ -34,8 +35,9 @@ def write_answers_to_table(answers):
 
 
 def create_tables_if_not_exist():
-    # get_dynamodb_client().delete_table(TableName="coronavirus-vulnerable-people")
     client = get_dynamodb_client()
+
+    # client.meta.client.delete_table(TableName=_form_response_tablename())
     try:
         client.create_table(
             TableName=_form_response_tablename(),
@@ -45,7 +47,19 @@ def create_tables_if_not_exist():
             ],
             AttributeDefinitions=[
                 {"AttributeName": "ReferenceId", "AttributeType": "S"},
+                {"AttributeName": "NHSSub", "AttributeType": "S"},
                 {"AttributeName": "UnixTimestamp", "AttributeType": "N"},
+            ],
+            GlobalSecondaryIndexes=[
+                {
+                    "IndexName": "string",
+                    "KeySchema": [{"AttributeName": "NHSSub", "KeyType": "HASH"}],
+                    "Projection": {"ProjectionType": "ALL"},
+                    "ProvisionedThroughput": {
+                        "ReadCapacityUnits": 120,
+                        "WriteCapacityUnits": 20,
+                    },
+                }
             ],
             ProvisionedThroughput={"ReadCapacityUnits": 120, "WriteCapacityUnits": 20},
         )
