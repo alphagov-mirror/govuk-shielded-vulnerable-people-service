@@ -443,9 +443,9 @@ def get_nhs_login_callback():
     nhs_sub = session["nhs_sub"] = nhs_user_info["sub"]
 
     existing_record = form_response_model.get_record_using_nhs_sub(nhs_sub)
-    print(existing_record)
     if existing_record:
-        session["form_answers"] = existing_record["FormResponse"]
+        session["form_answers"] = {**existing_record["FormResponse"], **form_answers()}
+        form_response_model.write_answers_to_table(nhs_sub, session["form_answers"])
         session["accessing_saved_answers"] = True
         return redirect("/view-answers")
 
