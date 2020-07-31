@@ -84,7 +84,9 @@ class NHSOIDCDetails:
             state=auth_response.get("state", ""),
         )
         if "access_token" not in access_token_result:
-            raise RuntimeError("Could not retrieve access token from NHS oidc endpoint")
+            raise RuntimeError(
+                f"Could not retrieve access token from NHS oidc endpoint. Recieved {access_token_result}"
+            )
 
         return self.client.do_user_info_request(
             token=access_token_result["access_token"], method="GET"
