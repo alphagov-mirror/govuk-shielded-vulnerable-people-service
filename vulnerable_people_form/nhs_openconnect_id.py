@@ -60,7 +60,13 @@ class NHSOIDCDetails:
             }
         ).request(self.client.authorization_endpoint)
 
-    def get_nhs_user_info(self, callback_args):
+    def get_nhs_user_info_from_authorization_callback(self, callback_args):
+        return self._get_nhs_user_info(callback_args, self.authorization_callback_url)
+
+    def get_nhs_user_info_from_registration_callback(self, callback_args):
+        return self._get_nhs_user_info(callback_args, self.registration_callback_url)
+
+    def _get_nhs_user_info(self, callback_args, callback_url):
         auth_response = self.client.parse_response(
             AuthorizationResponse, info=callback_args, sformat="dict"
         )
@@ -72,7 +78,7 @@ class NHSOIDCDetails:
             request_args={
                 "code": auth_response["code"],
                 "client_id": self.client.client_id,
-                "redirect_uri": self.authorization_callback_url,
+                "redirect_uri": callback_url,
             },
             scope=self.scopes,
             state=auth_response.get("state", ""),
