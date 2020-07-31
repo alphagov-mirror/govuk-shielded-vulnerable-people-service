@@ -18,7 +18,10 @@ class NHSOIDCDetails:
     def init_app(self, app):
         try:
             self.client_id = app.config["NHS_OIDC_CLIENT_ID"]
-            self.callback_url = app.config["NHS_OIDC_CALLBACK_URL"]
+            self.authorization_callback_url = app.config["NHS_OIDC_LOGIN_CALLBACK_URL"]
+            self.registration_callback_url = app.config[
+                "NHS_OIDC_REGISTRATION_CALLBACK_URL"
+            ]
             self.scopes = app.config["NHS_OIDC_SCOPES"]
             self.vtr = app.config["NHS_OIDC_VTR"]
             self.authority_url = app.config["NHS_OIDC_AUTHORITY_URL"]
@@ -37,6 +40,12 @@ class NHSOIDCDetails:
             )
 
     def get_authorization_url(self):
+        return self._get_authorization_url(self.authorization_callback_url, False)
+
+    def get_registration_url(self):
+        return self._get_authorization_url(self.registration_callback_url, True)
+
+    def _get_authorization_url(self, callback_url, allow_registration):
         self.client.provider_config(self.authority_url)  # update
         return self.client.construct_AuthorizationRequest(
             request_args={
@@ -44,9 +53,10 @@ class NHSOIDCDetails:
                 "response_type": "code",
                 "scope": self.scopes,
                 "nonce": rndstr(),
-                "redirect_uri": self.callback_url,
+                "redirect_uri": callback_url,
                 "state": rndstr(),
                 "vtr": self.vtr,
+                "allow_registration": allow_registration,
             }
         ).request(self.client.authorization_endpoint)
 
@@ -54,7 +64,6 @@ class NHSOIDCDetails:
         auth_response = self.client.parse_response(
             AuthorizationResponse, info=callback_args, sformat="dict"
         )
-
         access_token_result = self.client.do_access_token_request(
             algorithm="RS512",
             authn_endpoint="token",
@@ -63,7 +72,7 @@ class NHSOIDCDetails:
             request_args={
                 "code": auth_response["code"],
                 "client_id": self.client.client_id,
-                "redirect_uri": self.callback_url,
+                "redirect_uri": self.authorization_callback_url,
             },
             scope=self.scopes,
             state=auth_response.get("state", ""),
