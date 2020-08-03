@@ -558,7 +558,7 @@ def get_nhs_login_callback():
 
 @form.route("/start", methods=["GET"])
 def get_start():
-    return redirect("/applying-on-own-behalf")
+    return redirect("/view-or-setup")
 
 
 @form.route("/live-in-england", methods=["GET"])
