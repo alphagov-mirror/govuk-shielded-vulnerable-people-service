@@ -936,9 +936,44 @@ def get_postcode_lookup():
     )
 
 
+def validate_length(form_answer_key_list, max_length, error_string):
+    import pprint
+
+    pprint.pprint(get_answer_from_form(form_answer_key_list))
+    if len(get_answer_from_form(form_answer_key_list) or "") > max_length:
+        session["error_items"] = {
+            **session.setdefault("error_items", {}),
+            form_answer_key_list[0]: {
+                **session["error_items"].get(form_answer_key_list[0], {}),
+                form_answer_key_list[-1]: error_string,
+            },
+        }
+        return False
+    return True
+
+
 def validate_support_address():
+    length_fstring = "'{}' cannot be longer than {} characters"
     value = all(
         [
+            validate_length(
+                ("support_address", "building_and_street_line_1"),
+                75,
+                length_fstring.format("Address line 1", 75),
+            ),
+            validate_length(
+                ("support_address", "building_and_street_line_2"),
+                75,
+                length_fstring.format("Address line 2", 75),
+            ),
+            validate_length(
+                ("support_address", "town_city"),
+                50,
+                length_fstring.format("Town or City", 50),
+            ),
+            validate_length(
+                ("support_address", "county"), 50, length_fstring.format("County", 50)
+            ),
             validate_mandatory_form_field(
                 "support_address",
                 "building_and_street_line_1",
