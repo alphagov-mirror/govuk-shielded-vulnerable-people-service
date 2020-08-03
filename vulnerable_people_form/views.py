@@ -189,11 +189,7 @@ def get_next_form_url_after_eligibility_check():
 
 @clear_errors_after
 def get_next_form_url_after_name():
-    print("poop")
-    print(is_nhs_login_user())
-    print(validate_date_of_birth())
     if is_nhs_login_user() and validate_date_of_birth():
-        print("poop")
         return get_next_form_url_after_date_of_birth()
     else:
         return "/date-of-birth"
