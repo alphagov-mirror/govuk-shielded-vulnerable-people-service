@@ -44,7 +44,7 @@ PAGE_TITLES = {
     "medical-conditions": "Do you have one of the listed medical conditions?",
     "name": "What is your name?	",
     "nhs-letter": "Have you had a letter from the NHS or been told by your doctor to ’shield’ because you’re clinically extremely vulnerable to coronavirus?",
-    "nhs-login": "Would you like to link this service to your NHS account?",
+    "nhs-login": "Would you like to use an existing NHS login to access this service?",
     "nhs-number": "Do you know your NHS number?",
     "nhs-registration": "Would you like to register an NHS Login to use with an account on this service?",
     "not-eligible-england": "Sorry, this service is only available in England",
@@ -310,8 +310,12 @@ def render_template_with_title(template_name, *args, **kwargs):
         template_name,
         *args,
         title_text=PAGE_TITLES[template_name[:-5]],
-        button_text="Save and continue" if accessing_saved_answers() else "Continue",
-        **kwargs,
+        **{
+            "button_text": "Save and continue"
+            if accessing_saved_answers()
+            else "Continue",
+            **kwargs,
+        },
     )
 
 
