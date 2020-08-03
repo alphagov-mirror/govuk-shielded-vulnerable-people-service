@@ -247,13 +247,15 @@ def route_to_next_form_page():
         return redirect_to_next_form_page("/live-in-england")
     elif current_form == "basic-care-needs":
         contact_details = form_answers().get("contact_details", {})
+        maybe_redirect_to_terminal_page = get_redirect_to_terminal_page_if_applicable()
         if (
-            session.get("nhs_sub")
+            maybe_redirect_to_terminal_page
+            or session.get("nhs_sub")
             or not contact_details.get("phone_number_texts")
             or not contact_details.get("email")
             or form_answers().get("applying_on_own_behalf") is False
         ):
-            return get_redirect_to_terminal_page()
+            return maybe_redirect_to_terminal_page
         else:
             return redirect("/nhs-registration")
     elif current_form == "carry-supplies":
