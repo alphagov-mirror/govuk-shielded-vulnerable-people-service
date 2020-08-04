@@ -26,15 +26,17 @@ def generate_reference_number():
 
 def write_answers_to_table(nhs_sub, answers):
     existing_item = get_record_using_nhs_sub(nhs_sub) or {}
+    reference_number = generate_reference_number()
     get_dynamodb_client().Table(_form_response_tablename()).put_item(
         Item={
             "NHSSub": nhs_sub,
-            "ReferenceId": generate_reference_number(),
+            "ReferenceId": reference_number,
             "UnixTimestamp": decimal.Decimal(time.time()),
             **existing_item,
             "FormResponse": answers,
         }
     )
+    return reference_number
 
 
 def get_record_using_nhs_sub(nhs_sub):
@@ -75,7 +77,7 @@ def create_tables_if_not_exist():
             ],
             GlobalSecondaryIndexes=[
                 {
-                    "IndexName": "string",
+                    "IndexName": "NHSSub-index",
                     "KeySchema": [{"AttributeName": "NHSSub", "KeyType": "HASH"}],
                     "Projection": {"ProjectionType": "ALL"},
                     "ProvisionedThroughput": {
