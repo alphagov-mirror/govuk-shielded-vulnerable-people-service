@@ -163,7 +163,8 @@ def route_to_next_form_page():
             session.get("nhs_sub")
             or not contact_details.get("phone_number_texts")
             or not contact_details.get("email")
-            or form_answers().get("applying_on_own_behalf") is False
+            or ApplyingOnOwnBehalfAnswers(form_answers().get("applying_on_own_behalf"))
+            is ApplyingOnOwnBehalfAnswers.NO
         ):
             return redirect("/confirmation")
         else:
