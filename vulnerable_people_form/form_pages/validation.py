@@ -204,7 +204,7 @@ def validate_postcode(section):
     error = None
     if not postcode:
         error = "What is the postcode where you need support?"
-    elif re.match(postcode_regex, postcode) is None:
+    elif re.match(postcode_regex, postcode.upper()) is None:
         error = "Enter a real postcode"
 
     if error:
