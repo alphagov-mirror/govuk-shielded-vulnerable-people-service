@@ -1,0 +1,74 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: governmentpaas/cf-cli
+    tag: latest
+inputs:
+  - name: git-develop
+    path: src
+params:
+  CF_API: https://api.cloud.service.gov.uk
+  CF_USERNAME: ((paas-username))
+  CF_PASSWORD: ((paas-password))
+  CF_ORG: govuk_development
+  GA_VIEW_ID: UA-43115970-1
+  GA_CROSS_DOMAIN_ID: UA-145652997-1
+  SENTRY_DSN: https://((sentry-dsn))
+  SECRET_KEY_BASE:
+  CF_STARTUP_TIMEOUT:
+  CF_SPACE:
+  HOSTNAME:
+  INSTANCES:
+  WORKER_INSTANCES:
+  BASIC_AUTH_PASSWORD:
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
+  AWS_ERROR_PAGES_BUCKET_NAME:
+  AWS_REGION: eu-west-2
+  METRICS_USERNAME: ((metrics-username))
+  METRICS_PASSWORD: ((metrics-password))
+  GOVUK_NOTIFY_EMAIL_TEMPLATE_ID:
+  GOVUK_NOTIFY_SMS_TEMPLATE_ID:
+  NOTIFY_API_KEY:
+  ORDNANCE_SURVEY_PLACES_API_KEY: ((ordnance-survey-places-api-key))
+run:
+  dir: src
+  path: sh
+  args:
+    - '-c'
+    - |
+      set -eu
+
+      cf api "$CF_API"
+      cf auth
+      cf t -o "$CF_ORG" -s "$CF_SPACE"
+      cf create-app govuk-coronavirus-shielded-vulnerable-people-form || true
+      cf apply-manifest -f manifest.yml
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form CF_STARTUP_TIMEOUT "$CF_STARTUP_TIMEOUT"
+
+      cf scale -i "$INSTANCES" govuk-coronavirus-shielded-vulnerable-people-form
+      cf scale --process worker -i "$WORKER_INSTANCES" govuk-coronavirus-shielded-vulnerable-people-form
+
+      if [[ "${REQUIRE_BASIC_AUTH:-}" = "true" ]]; then
+        cf set-env govuk-coronavirus-shielded-vulnerable-people-form REQUIRE_BASIC_AUTH "$REQUIRE_BASIC_AUTH"
+      fi
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form BASIC_AUTH_PASSWORD "$BASIC_AUTH_PASSWORD"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form SENTRY_DSN "$SENTRY_DSN"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form SENTRY_CURRENT_ENV "$CF_SPACE"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form AWS_ACCESS_KEY_ID "$AWS_ACCESS_KEY_ID"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form AWS_SECRET_ACCESS_KEY "$AWS_SECRET_ACCESS_KEY"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form SECRET_KEY_BASE "$SECRET_KEY_BASE"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form GA_VIEW_ID "$GA_VIEW_ID"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form GA_CROSS_DOMAIN_ID "$GA_CROSS_DOMAIN_ID"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form METRICS_USERNAME "$METRICS_USERNAME"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form METRICS_PASSWORD "$METRICS_PASSWORD"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form GOVUK_NOTIFY_EMAIL_TEMPLATE_ID "$GOVUK_NOTIFY_EMAIL_TEMPLATE_ID"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form GOVUK_NOTIFY_SMS_TEMPLATE_ID "$GOVUK_NOTIFY_SMS_TEMPLATE_ID"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form NOTIFY_API_KEY "$NOTIFY_API_KEY"
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form PAAS_ENV "$CF_SPACE"
+
+      cf set-env govuk-coronavirus-shielded-vulnerable-people-form ORDNANCE_SURVEY_PLACES_API_KEY "$ORDNANCE_SURVEY_PLACES_API_KEY"
+
+      cf push govuk-coronavirus-shielded-vulnerable-people-form --strategy rolling
+      cf map-route govuk-coronavirus-shielded-vulnerable-people-form cloudapps.digital --hostname "$HOSTNAME"

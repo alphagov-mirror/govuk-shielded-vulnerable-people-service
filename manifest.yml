@@ -1,0 +1,13 @@
+---
+applications:
+- name: govuk-coronavirus-shielded-vulnerable-people-form
+  buildpack: python_buildpack
+  memory: 2G
+  services:
+  - logit-ssl-drain
+  - splunk-ssl-drain
+  - prometheus-service-broker
+  env:
+    GOVUK_APP_DOMAIN: cloudapps.digital
+    GOVUK_WEBSITE_ROOT: www.gov.uk
+    BASIC_AUTH_USERNAME: gds
