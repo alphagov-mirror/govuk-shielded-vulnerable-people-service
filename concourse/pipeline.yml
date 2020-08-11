@@ -40,7 +40,7 @@ jobs:
 #        passed: [run-quality-checks]
       - task: deploy-to-paas
         config:
-        file: git-master/concourse/tasks/deploy-to-govuk-paas.yml
+        file: git-develop/concourse/tasks/deploy-to-govuk-paas.yml
         params:
           CF_SPACE: dev
           INSTANCES: 1
