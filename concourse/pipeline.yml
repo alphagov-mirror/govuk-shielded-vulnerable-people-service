@@ -38,6 +38,7 @@ jobs:
     plan:
       - get: git-develop
         trigger: true
+        passed: [update-pipeline]
 #        passed: [run-quality-checks]
       - task: deploy-to-paas
         config:
