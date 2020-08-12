@@ -5,6 +5,28 @@ resource_types:
     source:
       repository: nulldriver/cf-cli-resource
 
+  - name: git-master-python-dockerfile
+      type: git
+      icon: github-circle
+      source:
+        uri: https://github.com/alphagov/govuk-shielded-vulnerable-people-service
+        branch: master
+        paths:
+          - concourse/Dockerfile
+          - requirements.txt
+
+  - name: every-day
+      type: time
+      source:
+        interval: 24h
+
+  - name: tests-image
+      type: docker-image
+      icon: docker
+      source:
+        repository: ((readonly_private_ecr_repo_url))
+        tag: govuk-shielded-vulnerable-people-tests-image
+
   - name: slack-notification
     type: docker-image
     source:
@@ -33,12 +55,48 @@ jobs:
       - set_pipeline: shielded-vulnerable-people-form
         file: git-master/concourse/pipeline.yml
 
+  - name: build-tests-image
+    serial: true
+    build_logs_to_retain: 100
+    plan:
+      - get: every-day
+        trigger: true
+      - get: git-master-python-dockerfile
+        trigger: true
+      - put: tests-image
+        params:
+          build: git-master-python-dockerfile
+          dockerfile: git-master-python-dockerfile/concourse/Dockerfile
+
+  - name: run-quality-checks
+      serial: true
+      plan:
+        - get: tests-image
+          passed: [build-tests-image]
+          trigger: true
+        - get: git-master
+          trigger: true
+        - task: run-tests-task
+          image: tests-image
+          config:
+            inputs:
+              - name: git-master
+            platform: linux
+            run:
+              dir: git-master
+              path: bash
+              args:
+                - -c
+                - |
+                  set -eu
+                  echo 'hello'
+
   - name: deploy-to-staging
     serial: true
     plan:
       - get: git-master
         trigger: true
-        passed: [update-pipeline]
+        passed: [run-quality-checks]
       - task: deploy-to-paas
         config:
         file: git-master/concourse/tasks/deploy-to-govuk-paas.yml
