@@ -24,7 +24,7 @@ resources:
     icon: github-circle
     source:
       uri: https://github.com/alphagov/govuk-shielded-vulnerable-people-service
-      branch: master
+      branch: concourse-pipelines
       paths:
         - concourse/Dockerfile
         - requirements.txt
@@ -89,7 +89,7 @@ jobs:
               - -c
               - |
                 set -eu
-                echo 'hello'
+                echo "hello"
 
   - name: deploy-to-staging
     serial: true

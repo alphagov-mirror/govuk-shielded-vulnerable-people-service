@@ -15,8 +15,6 @@ RUN apt-get update --fix-missing && apt-get -y upgrade \
 
 ENV CHROME_NO_SANDBOX=true
 
-RUN apk add --no-cache openssl-dev libffi-dev build-base
-
 COPY requirements.txt /application/
 
 WORKDIR /application/
