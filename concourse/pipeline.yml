@@ -12,7 +12,7 @@ resource_types:
       tag: latest
 
 resources:
-  - name: git-develop
+  - name: git-master
     type: git
     icon: github-circle
     source:
@@ -28,35 +28,29 @@ jobs:
   - name: update-pipeline
     serial: true
     plan:
-      - get: git-develop
+      - get: git-master
         trigger: true
       - set_pipeline: shielded-vulnerable-people-form
-        file: git-develop/concourse/pipeline.yml
+        file: git-master/concourse/pipeline.yml
 
-  - name: deploy-to-dev
+  - name: deploy-to-staging
     serial: true
     plan:
-      - get: git-develop
+      - get: git-master
         trigger: true
         passed: [update-pipeline]
-#        passed: [run-quality-checks]
       - task: deploy-to-paas
         config:
-        file: git-develop/concourse/tasks/deploy-to-govuk-paas.yml
+        file: git-master/concourse/tasks/deploy-to-govuk-paas.yml
         params:
-          CF_SPACE: dev
-          INSTANCES: 1
+          CF_SPACE: staging
+          INSTANCES: 5
           WORKER_INSTANCES: 1
           CF_STARTUP_TIMEOUT: 5 # minutes
-          REQUIRE_BASIC_AUTH: "true"
-          BASIC_AUTH_PASSWORD: ((basic-auth-password))
-          AWS_ACCESS_KEY_ID: ((aws-access-key-id))
-          AWS_SECRET_ACCESS_KEY: ((aws-secret-access-key))
-          SECRET_KEY_BASE: ((secret-key-base-dev))
-          HOSTNAME: ((gds-shielded-vulnerable-people-service-dev))
+          HOSTNAME: gds-shielded-vulnerable-people-service-staging
           GOVUK_NOTIFY_EMAIL_TEMPLATE_ID: d4fddfce-1dfd-4ff5-ab42-156e6ba3e76b
           GOVUK_NOTIFY_SMS_TEMPLATE_ID: a2166a39-91f5-4370-bbbf-c59276975d49
-          NOTIFY_API_KEY: ((notify-api-key-test))
+          NOTIFY_API_KEY: ((svp-form/notify-api-key-stg))
         on_failure:
           put: govuk-coronavirus-services-tech-slack
           params:
