@@ -17,14 +17,14 @@ resources:
     icon: github-circle
     source:
       uri: https://github.com/alphagov/govuk-shielded-vulnerable-people-service
-      branch: concourse-pipelines
+      branch: task/deployment-to-concourse
 
   - name: git-master-python-dockerfile
     type: git
     icon: github-circle
     source:
       uri: https://github.com/alphagov/govuk-shielded-vulnerable-people-service
-      branch: concourse-pipelines
+      branch: task/deployment-to-concourse
       paths:
         - concourse/Dockerfile
         - requirements.txt
