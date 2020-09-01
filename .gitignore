@@ -2,8 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
 /instance/config.py
+.coverage
 
 /venv
 .idea
+
+/vulnerable_people_form/static

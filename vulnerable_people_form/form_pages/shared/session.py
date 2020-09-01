@@ -45,7 +45,7 @@ def accessing_saved_answers():
 
 def update_session_answers_from_form_for_enum():
     session["form_answers"] = {
-        **session.setdefault("form_answers",),
+        **session.setdefault("form_answers", {}),
         **{k: int(v) for k, v in request_form().items()},
     }
     session["error_items"] = {}
