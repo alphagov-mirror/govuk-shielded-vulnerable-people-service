@@ -7,11 +7,11 @@ resources:
       uri: https://github.com/alphagov/govuk-shielded-vulnerable-people-service
       branch: feature/794/gatling-in-concourse
 
-  - name: slack
-    type: slack-alert
-    source:
-      url: ((slack_hook_automate))
-      channel: covid-engineering-team
+#  - name: slack
+#    type: slack-alert
+#    source:
+#      url: ((slack_hook_automate))
+#      channel: covid-engineering-team
 
 jobs:
   - name: update-pipeline
