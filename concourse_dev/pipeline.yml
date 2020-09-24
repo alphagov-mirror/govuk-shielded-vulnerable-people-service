@@ -1,10 +1,4 @@
 ---
-resource_types:
-  - name: slack-alert
-    type: registry-image
-    source:
-      repository: arbourd/concourse-slack-alert-resource
-
 resources:
   - name: git-dev
     type: git
@@ -13,22 +7,11 @@ resources:
       uri: https://github.com/alphagov/govuk-shielded-vulnerable-people-service
       branch: feature/794/gatling-in-concourse
 
-  - name: slack
-    type: slack-alert
-    source:
-      url: ((slack_hook_automate))
-      channel: covid-engineering-team
-
-# Anchors for later
-slack_alert_on_failure: &slack_alert_on_failure
-  put: slack
-  params:
-    alert_type: failed
-
-slack_alert_on_success: &slack_alert_on_success
-  put: slack
-  params:
-    alert_type: success
+#  - name: slack
+#    type: slack-alert
+#    source:
+#      url: ((slack_hook_automate))
+#      channel: covid-engineering-team
 
 jobs:
   - name: update-pipeline2
