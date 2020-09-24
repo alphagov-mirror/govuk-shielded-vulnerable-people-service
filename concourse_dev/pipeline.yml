@@ -29,4 +29,4 @@ jobs:
         trigger: true
         passed: [update-pipeline2]
       - task: test
-        file: git-dev/concourse/tasks/test.yml
+        file: git-dev/concourse_dev/tasks/test.yml
