@@ -19,7 +19,7 @@ jobs:
     plan:
       - get: git-dev
         trigger: true
-      - set_pipeline: svp-form
+      - set_pipeline: wip-svp-with-gatling
         file: git-dev/concourse_dev/pipeline.yml
 
   - name: test
