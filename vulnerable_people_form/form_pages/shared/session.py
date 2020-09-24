@@ -72,7 +72,7 @@ def _slice(keys, _dict):
     return (_dict[key] for key in keys if key in _dict)
 
 
-def get_summary_rows_from_form_answers():
+def get_summary_rows_from_form_answers(exclude_answers=None):
     summary_rows = []
     answers = form_answers()
     order = [
@@ -86,9 +86,9 @@ def get_summary_rows_from_form_answers():
         "contact_details"
     ]
 
-    if session.get("nhs_sub"):
-        order.remove("nhs_number")
-        order.remove("date_of_birth")
+    if exclude_answers:
+        for answer_to_exclude in exclude_answers:
+            order.remove(answer_to_exclude)
 
     answers_to_key = {
         "priority_supermarket_deliveries": PrioritySuperMarketDeliveriesAnswers,
