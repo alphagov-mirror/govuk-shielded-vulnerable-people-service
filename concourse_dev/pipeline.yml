@@ -31,7 +31,7 @@ slack_alert_on_success: &slack_alert_on_success
     alert_type: success
 
 jobs:
-  - name: update-pipeline
+  - name: update-pipeline2
     serial: true
     plan:
       - get: git-dev
@@ -44,6 +44,6 @@ jobs:
     plan:
       - get: git-dev
         trigger: true
-        passed: [update-pipeline]
+        passed: [update-pipeline2]
       - task: test
         file: git-dev/concourse/tasks/test.yml
