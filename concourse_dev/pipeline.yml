@@ -14,7 +14,7 @@ resources:
 #      channel: covid-engineering-team
 
 jobs:
-  - name: update-pipeline2
+  - name: update-pipeline
     serial: true
     plan:
       - get: git-dev
@@ -27,6 +27,6 @@ jobs:
     plan:
       - get: git-dev
         trigger: true
-        passed: [update-pipeline2]
+        passed: [update-pipeline]
       - task: test
         file: git-dev/concourse_dev/tasks/test.yml
