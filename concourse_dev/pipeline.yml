@@ -37,9 +37,8 @@ jobs:
       - get: git-dev
         trigger: true
       - set_pipeline: svp-form
-        file: git-master/concourse/pipeline.yml
+        file: git-dev/concourse_dev/pipeline.yml
 
-    #on_failure: *slack_alert_on_failure
   - name: test
     serial: true
     plan:
@@ -48,5 +47,3 @@ jobs:
         passed: [update-pipeline]
       - task: test
         file: git-dev/concourse/tasks/test.yml
-    #on_failure: *slack_alert_on_failure
-
