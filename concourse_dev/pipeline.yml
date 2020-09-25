@@ -22,7 +22,7 @@ jobs:
       - set_pipeline: wip-svp-with-gatling
         file: git-dev/concourse_dev/pipeline.yml
 
-  - name: test
+  - name: gatling
     serial: true
     plan:
       - get: git-dev
