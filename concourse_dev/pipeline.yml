@@ -28,5 +28,5 @@ jobs:
       - get: git-dev
         trigger: true
         passed: [update-pipeline]
-      - task: test
-        file: git-dev/concourse_dev/tasks/test.yml
+      - task: gatling
+        file: git-dev/concourse_dev/tasks/gatling.yml
