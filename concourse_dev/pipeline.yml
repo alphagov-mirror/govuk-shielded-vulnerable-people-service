@@ -29,7 +29,7 @@ jobs:
       - set_pipeline: wip-svp-with-gatling
         file: git-dev/concourse_dev/pipeline.yml
 
-  - name: gatling-workflow-load-test
+  - name: gatling-workflow-load-test-in-staging
     plan:
       - get: git-dev
       - get: trigger-at-1am
