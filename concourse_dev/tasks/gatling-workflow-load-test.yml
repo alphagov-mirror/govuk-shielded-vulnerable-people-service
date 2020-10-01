@@ -7,6 +7,8 @@ image_resource:
     tag: 3.6.3-ibmjava-8-alpine
 inputs:
   - name: git-dev
+outputs:
+  - name: gatling-results
 run:
   path: /bin/bash
   args:
@@ -21,8 +23,8 @@ run:
     - |
       cd loadtests
       mvn clean gatling:test \
-        -DinjectUsersPerSecond=36 \
-        -DinjectDurationSeconds=120 \
+        -DinjectUsersPerSecond=1 \
+        -DinjectDurationSeconds=1 \
         -DpauseBetweenRequestsInSeconds=1 \
         -DnumberOfRepetitions=1 \
         -Dgatling.simulationClass=svp.SvpSimulationConstantUsersPerSec \
