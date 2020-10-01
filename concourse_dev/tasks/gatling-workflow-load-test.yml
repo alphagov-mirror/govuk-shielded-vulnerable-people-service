@@ -9,7 +9,7 @@ inputs:
   - name: git-dev
 outputs:
   - name: gatling-results
-    path: loadtests/target/gatling
+    path: git-dev/loadtests/target/gatling
 run:
   path: /bin/bash
   args:
