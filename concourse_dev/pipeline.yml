@@ -63,6 +63,9 @@ jobs:
                     - |
                       set -euo pipefail
                       source aws-credentials/.env
+                      pwd
+                      ls
+
                       aws s3 cp \
                         loadtests/target/gatling \
                         s3://gds-ons-covid-19-system-test-results-staging/gatling/workflow-load-tests/$(date +%FT%T)/ \
