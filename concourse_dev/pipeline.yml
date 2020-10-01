@@ -34,8 +34,9 @@ jobs:
       - get: git-dev
       - get: trigger-at-1am
         trigger: true
-      - task: gatling
-        file: git-dev/concourse_dev/tasks/gatling-workflow-load-test.yml
+      - try:
+          - task: gatling
+            file: git-dev/concourse_dev/tasks/gatling-workflow-load-test.yml
       - task: get-aws-credentials
         file: git-dev/concourse_dev/tasks/get-gatling-tester-aws-creds.yml
         params:
