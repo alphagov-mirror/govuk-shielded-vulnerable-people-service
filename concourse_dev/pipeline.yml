@@ -54,7 +54,7 @@ jobs:
           inputs:
             - name: aws-credentials
             - name: gatling-results
-      run:
+          run:
             path: ash
             args:
               - -c
