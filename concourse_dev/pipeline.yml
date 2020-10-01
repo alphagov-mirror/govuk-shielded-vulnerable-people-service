@@ -18,6 +18,7 @@ resources:
     source:
       expression: "0 1 * * *"
       location: "Local"
+      fire_immediately: true
 
 jobs:
   - name: update-pipeline
@@ -35,6 +36,35 @@ jobs:
         trigger: true
       - task: gatling
         file: git-dev/concourse_dev/tasks/gatling-workflow-load-test.yml
+      - task: get-aws-credentials
+        file: git-dev/concourse_dev/tasks/get-gatling-tester-aws-creds.yml
+        params:
+          ACCOUNT_ID: 375282846305
+          ENVIRONMENT: staging
+          REGION: eu-west-2
+          DURATION: 21600
+      - task: upload-gatling-results-to-s3
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: governmentpaas/awscli
+              tag: latest
+          inputs:
+            - name: aws-credentials
+            - name: gatling-results
+      run:
+            path: ash
+            args:
+              - -c
+              - |
+                set -euo pipefail
+                source aws-credentials/.env
+                aws s3 cp \
+                  gatling-results/loadtests/target/gatling \
+                  s3:://gds-ons-covid-19-system-test-results-staging/gatling/workflow-load-tests/$(date +%FT%T)/ \
+                  --recursive
 
   - name: run-daily-and-mi-workflows-in-staging
     plan:
