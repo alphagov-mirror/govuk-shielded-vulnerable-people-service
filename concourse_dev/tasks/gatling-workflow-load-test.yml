@@ -7,8 +7,6 @@ image_resource:
     tag: 3.6.3-ibmjava-8-alpine
 inputs:
   - name: git-dev
-outputs:
-  - name: gatling-results
 run:
   path: /bin/bash
   args:
