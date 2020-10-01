@@ -53,20 +53,20 @@ jobs:
                   source:
                     repository: governmentpaas/awscli
                     tag: latest
-              inputs:
-                - name: aws-credentials
-                - name: gatling-results
-              run:
-              path: ash
-              args:
-                - -c
-                - |
-                  set -euo pipefail
-                  source aws-credentials/.env
-                  aws s3 cp \
-                    gatling-results/loadtests/target/gatling \
-                    s3:://gds-ons-covid-19-system-test-results-staging/gatling/workflow-load-tests/$(date +%FT%T)/ \
-                    --recursive
+                inputs:
+                  - name: aws-credentials
+                  - name: gatling-results
+                run:
+                path: ash
+                args:
+                  - -c
+                  - |
+                    set -euo pipefail
+                    source aws-credentials/.env
+                    aws s3 cp \
+                      gatling-results/loadtests/target/gatling \
+                      s3:://gds-ons-covid-19-system-test-results-staging/gatling/workflow-load-tests/$(date +%FT%T)/ \
+                      --recursive
 
   - name: run-daily-and-mi-workflows-in-staging
     plan:
