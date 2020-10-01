@@ -23,7 +23,7 @@ run:
     # Suppress console log to final report only (done by turning off console writer)
     - |
       cd loadtests
-      mvn clean gatling:test \
+      mvn gatling:test \
         -DinjectUsersPerSecond=1 \
         -DinjectDurationSeconds=1 \
         -DpauseBetweenRequestsInSeconds=1 \
