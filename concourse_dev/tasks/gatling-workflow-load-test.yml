@@ -24,11 +24,10 @@ run:
       cd loadtests
       mvn clean gatling:test \
         -DinjectUsersPerSecond=36 \
-        -DinjectDurationSeconds=1200 \
+        -DinjectDurationSeconds=120 \
         -DpauseBetweenRequestsInSeconds=1 \
         -DnumberOfRepetitions=1 \
         -Dgatling.simulationClass=svp.SvpSimulationConstantUsersPerSec \
-        -Dgatling.data.charting.noReports=true \
         -Dgatling.data.writers.0=file \
         -Dgatling.data.charting.indicators.lowerBound=1000 \
         -Dgatling.data.charting.indicators.higherBound=1500 \
