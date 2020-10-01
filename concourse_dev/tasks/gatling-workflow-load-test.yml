@@ -9,6 +9,7 @@ inputs:
   - name: git-dev
 outputs:
   - name: gatling-results
+    path: loadtests/target/gatling
 run:
   path: /bin/bash
   args:
@@ -31,6 +32,5 @@ run:
         -Dgatling.data.writers.0=file \
         -Dgatling.data.charting.indicators.lowerBound=1000 \
         -Dgatling.data.charting.indicators.higherBound=1500 \
-        -Dgatling.directory.results=gatling-results
 
   dir: git-dev
