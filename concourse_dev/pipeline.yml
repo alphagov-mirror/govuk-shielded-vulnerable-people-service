@@ -63,9 +63,7 @@ jobs:
                     - |
                       set -euo pipefail
                       source aws-credentials/.env
-                      pwd
-                      cd gatling-results
-                      ls
+                      ls -iR
 
                       aws s3 cp \
                         loadtests/target/gatling \
