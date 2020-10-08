@@ -85,7 +85,7 @@ jobs:
                       set -euo pipefail
                       source aws-credentials/.env
                       aws glue start-job-run \
-                        --job-name "rds_clean_gatling_test_data"
+                        --job-name "rds-clean-gatling-test-data"
 
   - name: run-daily-and-mi-workflows-in-staging
     plan:
