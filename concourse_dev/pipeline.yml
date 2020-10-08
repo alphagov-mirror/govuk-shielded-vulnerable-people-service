@@ -67,6 +67,25 @@ jobs:
                         gatling-results \
                         s3://gds-ons-covid-19-system-test-results-staging/gatling/workflow-load-tests/$(date +%FT%T)/ \
                         --recursive
+            - task: clean-out-gatling-test-submissions-from-rds
+              config:
+                platform: linux
+                image_resource:
+                  type: registry-image
+                  source:
+                    repository: governmentpaas/awscli
+                    tag: latest
+                inputs:
+                  - name: aws-credentials
+                run:
+                  path: ash
+                  args:
+                    - -c
+                    - |
+                      set -euo pipefail
+                      source aws-credentials/.env
+                      aws glue start-job-run \
+                        --job-name "rds_clean_gatling_test_data"
 
   - name: run-daily-and-mi-workflows-in-staging
     plan:
