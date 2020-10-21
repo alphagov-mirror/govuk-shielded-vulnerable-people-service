@@ -10,4 +10,4 @@ COPY . .
 RUN bash build.sh
 RUN cp instance/config.py.sample instance/config.py
 ENV FLASK_ENV=production
-CMD gunicorn -b 127.0.0.1:5000 -w $GUNICORN_WORKER_COUNT "vulnerable_people_form:create_app(None)"
+CMD gunicorn -b 127.0.0.1:5000 -w $GUNICORN_WORKER_COUNT "vulnerable_people_form:create_app(None)" -c gunicorn_config.py
