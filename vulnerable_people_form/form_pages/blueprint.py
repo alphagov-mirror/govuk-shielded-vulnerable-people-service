@@ -8,11 +8,7 @@ from flask import (
 )
 from flask_wtf.csrf import CSRFError
 
-from vulnerable_people_form.form_pages.shared.constants import SESSION_KEY_QUERYSTRING_PARAMS
-from vulnerable_people_form.form_pages.shared.querystring_utils import (
-    append_querystring_params,
-    get_querystring_params_to_retain
-)
+from vulnerable_people_form.form_pages.shared.querystring_utils import append_querystring_params
 
 form = Blueprint("form", __name__)
 
@@ -20,14 +16,8 @@ form = Blueprint("form", __name__)
 @form.before_request
 def redirect_to_first_page():
     if not session.get("form_started"):
-        session.clear()
-        session["form_started"] = True
-
-        querystring_params = get_querystring_params_to_retain()
-        if querystring_params:
-            session[SESSION_KEY_QUERYSTRING_PARAMS] = querystring_params
-
-        return redirect("/applying-on-own-behalf")
+        redirect_location = append_querystring_params("/session-expired")
+        return redirect(redirect_location)
 
 
 @form.after_request
