@@ -17,7 +17,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: coronavirus
     ports:
-      - "3306:3306"
+      - "3306:3307"
   rds-client-api:
     image: koxudaxi/local-data-api
     restart: always
@@ -25,7 +25,7 @@ services:
       - "coronovirus-mysql-pytest"
     environment:
       MYSQL_HOST: coronovirus-mysql-pytest
-      MYSQL_PORT: 3306
+      MYSQL_PORT: 3307
       MYSQL_USER: root
       MYSQL_PASSWORD: password
       RESOURCE_ARN: 'arn:aws:rds:eu-west-2:123456789012:cluster:dummy'
