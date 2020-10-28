@@ -20,7 +20,7 @@ services:
       - "5000:5000"
     links:
       - "rds-client-api"
-  coronovirus-mysql-pytest:
+  coronavirus-mysql-pytest:
     image: mysql:5.6
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -31,9 +31,9 @@ services:
     image: koxudaxi/local-data-api
     restart: always
     links:
-      - "coronovirus-mysql-pytest"
+      - "coronavirus-mysql-pytest"
     environment:
-      MYSQL_HOST: coronovirus-mysql-pytest
+      MYSQL_HOST: coronavirus-mysql-pytest
       MYSQL_PORT: 3306
       MYSQL_USER: root
       MYSQL_PASSWORD: password
