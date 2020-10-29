@@ -95,7 +95,8 @@ To set up the app for local development you need to follow these steps:
     ```docker-compose up -d```
 
 
-3. Make sure the database is up to date.
+3. Make sure the database is up to date (following the guide in 
+   covid-engineering/database/README.md).
    ```
    cd $PATH_TO_COVID_ENGINEERING\covid-engineering\database
    alembic --config=alembic.local.ini upgrade head
