@@ -124,7 +124,6 @@ jobs:
     plan:
       - get: git-master
         trigger: true
-        passed: [smoke-test-sandbox]
       - task: e2e-test
         file: git-master/concourse/tasks/e2e-test.yml
         attempts: 2
