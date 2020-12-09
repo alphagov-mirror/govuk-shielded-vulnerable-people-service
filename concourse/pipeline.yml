@@ -22,28 +22,11 @@ resources:
       uri: https://github.com/alphagov/govuk-shielded-vulnerable-people-service
       branch: 994-Glue-failures
 
-  - name: slack
-    type: slack-alert
-    source:
-      url: ((slack_hook_automate))
-      channel: covid-engineering-team
-
   - name: trigger-at-1am
     type: cron-resource
     source:
       expression: "0 1 * * *"
       location: "Local"
-
-# Anchors for later
-slack_alert_on_failure: &slack_alert_on_failure
-  put: slack
-  params:
-    alert_type: failed
-
-slack_alert_on_success: &slack_alert_on_success
-  put: slack
-  params:
-    alert_type: success
 
 jobs:
   - name: update-pipeline
