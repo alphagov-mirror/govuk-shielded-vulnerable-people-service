@@ -5,8 +5,9 @@ from datetime import datetime, timezone
 import logging
 import os
 
-workflow_to_trigger = 'cv-vulnerable-people-daily-wave-two-pipeline-dev-three'
-workflows_to_check = ['cv-vulnerable-people-daily-wave-two-pipeline-dev-three', 'dw-etl-daily-pipeline-dev-three']
+env = 'staging'
+workflow_to_trigger = f'cv-vulnerable-people-daily-wave-two-pipeline-{env}'
+workflows_to_check = [f'cv-vulnerable-people-daily-wave-two-pipeline-{env}', f'dw-etl-daily-pipeline-{env}']
 running_statuses = ['RUNNING', 'STOPPING']
 completed_statues = ['COMPLETED', 'STOPPED', 'ERROR']
 timeout = 60  # 60*60 * 3
