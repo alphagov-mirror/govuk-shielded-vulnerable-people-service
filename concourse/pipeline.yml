@@ -53,7 +53,7 @@ jobs:
         trigger: true
       - set_pipeline: svp-form-temp-gatling
         file: git-master/concourse/pipeline.yml
-    on_failure: *slack_alert_on_failure
+
 
   - name: run-daily-and-mi-workflows-in-staging
     plan:
