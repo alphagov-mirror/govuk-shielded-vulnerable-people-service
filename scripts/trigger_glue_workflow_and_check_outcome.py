@@ -78,7 +78,7 @@ def check_work_flow_compeleted(work_flow_name):
 
 def main():
     logger.info(f'Triggering Workflow:{workflow_to_trigger}')
-    # client.start_workflow_run(Name=workflow_to_trigger)
+    client.start_workflow_run(Name=workflow_to_trigger)
 
     for workflow in workflows_to_check:
         check_work_flow_compeleted(workflow)
