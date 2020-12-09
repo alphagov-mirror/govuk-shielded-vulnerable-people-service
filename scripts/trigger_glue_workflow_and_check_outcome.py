@@ -13,7 +13,7 @@ workflows_to_check = ['test3']
 
 running_statuses = ['RUNNING', 'STOPPING']
 completed_statues = ['COMPLETED', 'STOPPED', 'ERROR']
-timeout = 60  # 60*60 * 3
+timeout = 60 * 5  # 60*60 * 3
 wait_time = 5
 
 client = boto3.client('glue')
