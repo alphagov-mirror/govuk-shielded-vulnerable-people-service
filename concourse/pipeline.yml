@@ -85,3 +85,4 @@ jobs:
                 echo "Running Python script:"
                 python3 scripts/trigger_glue_workflow_and_check_outcome.py
             dir: git-master
+
