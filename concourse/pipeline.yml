@@ -46,8 +46,8 @@ jobs:
       - task: get-aws-credentials
         file: git-master/concourse/tasks/get-gatling-tester-aws-creds.yml
         params:
-          ACCOUNT_ID: 375282846305
-          ENVIRONMENT: staging
+          ACCOUNT_ID: 364632561993  # 375282846305
+          ENVIRONMENT: dev-three  # staging
           REGION: eu-west-2
           DURATION: 21600
       - task: run-pipelines
