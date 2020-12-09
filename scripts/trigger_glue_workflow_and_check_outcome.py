@@ -4,17 +4,35 @@ import time
 from datetime import datetime, timezone
 import logging
 import os
+import argparse
 
-env = 'staging'
-# workflow_to_trigger = f'cv-vulnerable-people-daily-wave-two-pipeline-{env}'
-# workflows_to_check = [f'cv-vulnerable-people-daily-wave-two-pipeline-{env}', f'dw-etl-daily-pipeline-{env}']
-workflow_to_trigger = 'test3'
-workflows_to_check = ['test3']
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--workflow_to_trigger", help="workflow to trigger")
+parser.add_argument("--workflows_to_check", help="comma separted list of workflows to check")
+parser.add_argument("--timeout", help="timeout", type=int)
+parser.add_argument("--wait_time", help="time to wait before checking the status again", type=int)
+args = parser.parse_args()
+
+if (
+    args.workflow_to_trigger is None or
+    args.workflows_to_check is None or
+    args.timeout is None or
+    args.wait_time is None
+   ):
+    raise Exception('''Please supply arguments for:
+                         --workflow_to_trigger
+                         --workflows_to_check
+                         --timeout
+                         --wait_time''')
+
+
+workflow_to_trigger = args.workflow_to_trigger   # 'cv-vulnerable-people-daily-wave-two-pipeline-dev-three'
+workflows_to_check = args.workflows_to_check.split(',')   # ['cv-vulnerable-people-daily-wave-two-pipeline-dev-three', 'dw-etl-daily-pipeline-dev-three']
 running_statuses = ['RUNNING', 'STOPPING']
 completed_statues = ['COMPLETED', 'STOPPED', 'ERROR']
-timeout = 60 * 5  # 60*60 * 3
-wait_time = 5
+timeout = args.timeout  # 60*60 * 3
+wait_time = args.wait_time
 
 client = boto3.client('glue')
 logger = logging.getLogger()

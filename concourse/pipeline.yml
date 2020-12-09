@@ -78,8 +78,13 @@ jobs:
                 echo "Installing libraries required for test:"
                 source ../aws-credentials/.env
                 make install
-                echo "Running Python script:"
+
+                echo "Running Python script to trigger workflow:"
                 python3 scripts/trigger_glue_workflow_and_check_outcome.py
+                         --workflow_to_trigger test3 \
+                         --workflows_to_check test3 \
+                         --timeout 600 \
+                         --wait_time 5
             dir: git-master
 
 
