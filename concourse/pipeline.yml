@@ -28,21 +28,10 @@ resources:
       url: ((slack_hook_automate))
       channel: covid-engineering-team
 
-  - name: every-2m
-    type: time
-    source:
-      interval: 2m
-
   - name: trigger-at-1am
     type: cron-resource
     source:
       expression: "0 1 * * *"
-      location: "Local"
-
-  - name: trigger-at-6am
-    type: cron-resource
-    source:
-      expression: "0 6 * * *"
       location: "Local"
 
 # Anchors for later
