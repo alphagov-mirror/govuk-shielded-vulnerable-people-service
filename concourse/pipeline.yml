@@ -22,11 +22,11 @@ resources:
       uri: https://github.com/alphagov/govuk-shielded-vulnerable-people-service
       branch: 994-Glue-failures
 
-  - name: trigger-at-1am
-    type: cron-resource
-    source:
-      expression: "0 1 * * *"
-      location: "Local"
+  # - name: trigger-at-1am
+  #   type: cron-resource
+  #   source:
+  #     expression: "0 1 * * *"
+  #     location: "Local"
 
 jobs:
   - name: update-pipeline
@@ -41,7 +41,7 @@ jobs:
   - name: run-daily-and-mi-workflows-in-staging
     plan:
       - get: git-master
-      - get: trigger-at-1am
+      #- get: trigger-at-1am
         trigger: true
       - task: get-aws-credentials
         file: git-master/concourse/tasks/get-gatling-tester-aws-creds.yml

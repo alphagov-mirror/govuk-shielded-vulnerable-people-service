@@ -9,7 +9,7 @@ workflow_to_trigger = 'cv-vulnerable-people-daily-wave-two-pipeline-dev-three'
 workflows_to_check = ['cv-vulnerable-people-daily-wave-two-pipeline-dev-three', 'dw-etl-daily-pipeline-dev-three']
 running_statuses = ['RUNNING', 'STOPPING']
 completed_statues = ['COMPLETED', 'STOPPED', 'ERROR']
-timeout = 60*60 * 3
+timeout = 60  # 60*60 * 3
 wait_time = 5
 
 client = boto3.client('glue')
@@ -74,7 +74,7 @@ def check_work_flow_compeleted(work_flow_name):
 
 def main():
     logger.info(f'Triggering Workflow:{workflow_to_trigger}')
-    client.start_workflow_run(Name=workflow_to_trigger)
+    # client.start_workflow_run(Name=workflow_to_trigger)
 
     for workflow in workflows_to_check:
         check_work_flow_compeleted(workflow)
