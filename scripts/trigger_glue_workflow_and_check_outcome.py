@@ -10,8 +10,8 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--workflow_to_trigger", help="workflow to trigger")
 parser.add_argument("--workflows_to_check", help="comma separted list of workflows to check")
-parser.add_argument("--timeout", help="timeout", type=int)
-parser.add_argument("--wait_time", help="time to wait before checking the status again", type=int)
+parser.add_argument("--timeout", help="timeout, in seconds", type=int)
+parser.add_argument("--wait_time", help="time to wait before checking the status again in seconds", type=int)
 args = parser.parse_args()
 
 if (
@@ -27,11 +27,11 @@ if (
                          --wait_time''')
 
 
-workflow_to_trigger = args.workflow_to_trigger   # 'cv-vulnerable-people-daily-wave-two-pipeline-dev-three'
-workflows_to_check = args.workflows_to_check.split(',')   # ['cv-vulnerable-people-daily-wave-two-pipeline-dev-three', 'dw-etl-daily-pipeline-dev-three']
+workflow_to_trigger = args.workflow_to_trigger
+workflows_to_check = args.workflows_to_check.split(',')
 running_statuses = ['RUNNING', 'STOPPING']
 completed_statues = ['COMPLETED', 'STOPPED', 'ERROR']
-timeout = args.timeout  # 60*60 * 3
+timeout = args.timeout
 wait_time = args.wait_time
 
 client = boto3.client('glue')
@@ -57,9 +57,7 @@ def check_work_flow_compeleted(work_flow_name):
 
     while True:
         work_flow_dict = client.get_workflow(Name=work_flow_name)
-        # print(work_flow_dict)
         status = work_flow_dict['Workflow']['LastRun']['Status']
-        # print('STATUS:' + status)
 
         if status in completed_statues:
             if(status == 'COMPLETED'):
