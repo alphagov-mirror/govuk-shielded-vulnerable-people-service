@@ -6,8 +6,11 @@ import logging
 import os
 
 env = 'staging'
-workflow_to_trigger = f'cv-vulnerable-people-daily-wave-two-pipeline-{env}'
-workflows_to_check = [f'cv-vulnerable-people-daily-wave-two-pipeline-{env}', f'dw-etl-daily-pipeline-{env}']
+# workflow_to_trigger = f'cv-vulnerable-people-daily-wave-two-pipeline-{env}'
+# workflows_to_check = [f'cv-vulnerable-people-daily-wave-two-pipeline-{env}', f'dw-etl-daily-pipeline-{env}']
+workflow_to_trigger = 'test3'
+workflows_to_check = ['test3']
+
 running_statuses = ['RUNNING', 'STOPPING']
 completed_statues = ['COMPLETED', 'STOPPED', 'ERROR']
 timeout = 60  # 60*60 * 3
