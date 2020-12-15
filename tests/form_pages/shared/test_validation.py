@@ -11,6 +11,7 @@ from vulnerable_people_form.form_pages.shared.answers_enums import (
     YesNoAnswers,
     PrioritySuperMarketDeliveriesAnswers)
 from vulnerable_people_form.form_pages.shared.form_utils import sanitise_name, format_postcode
+from vulnerable_people_form.form_pages.shared.validation import is_valid_uk_number, is_valid_uk_mobile_number
 
 _FORM_ANSWERS_FUNCTION_FULLY_QUALIFIED_NAME = \
     "vulnerable_people_form.form_pages.shared.validation.form_answers"
@@ -386,6 +387,49 @@ def test_validate_phone_number_if_present_should_return_true_when_no_email_enter
 
         assert is_valid is True
         assert len(test_request_ctx.session) == 0
+
+
+@pytest.mark.parametrize("phone_number", [
+    "020 8209 5552",
+    "+20 8209 5552",
+    "20 8209 5552",
+    "020-8209-5552",
+    " 020 8209 5552 ",
+    " 020 8209 5552 x",
+])
+def test_validate_phone_numbers_are_uk_expect_true(phone_number):
+    assert is_valid_uk_number(phone_number)
+
+
+@pytest.mark.parametrize("phone_number", [
+    "020 8209 555", # too short
+    "+20 8209 55523", # too long
+    "011 222 222-2222", # US
+    "blah", # text only
+])
+def test_validate_phone_numbers_are_uk_expect_false(phone_number):
+    assert is_valid_uk_number(phone_number) is False
+
+@pytest.mark.parametrize("phone_number", [
+    "020 8209 5552",
+    "+20 8209 5552",
+    "20 8209 5552",
+    "020-8209-5552",
+    " 020 8209 5552 ",
+    " 020 8209 5552 x",
+])
+def test_validate_phone_numbers_are_uk_mobile_expect_true(phone_number):
+    assert is_valid_uk_mobile_number(phone_number)
+
+
+@pytest.mark.parametrize("phone_number", [
+    "020 8209 555", # too short
+    "+20 8209 55523", # too long
+    "011 222 222-2222", # US
+    "blah", # text only
+])
+def test_validate_phone_numbers_are_uk_mobiles_expect_false(phone_number):
+    assert is_valid_uk_mobile_number(phone_number) is False
 
 
 @pytest.mark.parametrize("form_field_value", _yes_no_radio_button_positive_test_data)

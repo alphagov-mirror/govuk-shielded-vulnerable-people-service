@@ -1,8 +1,10 @@
 import datetime
-import email_validator
 import re
 
+import email_validator
 import phonenumbers
+from phonenumbers import carrier, number_type, parse as parse_phonenumber
+
 import stdnum.gb.nhs
 from flask import session
 
@@ -280,19 +282,43 @@ def validate_support_address():
 
 
 def validate_phone_number_if_present(section_key, phone_number_key):
-    try:
-        phone_number = form_answers()["contact_details"].get(phone_number_key, "")
-        if phone_number:
-            phonenumbers.parse(phone_number, region="GB")
-    except phonenumbers.NumberParseException:
-        error_message = ("Enter a telephone number, like 020 7946 0000, 07700900000 or +44 0808 157 0192",)
-        error_section = session.setdefault("error_items", {}).get(section_key, {})
-        session["error_items"] = {
-            **session.setdefault("error_items", {}),
-            section_key: {**error_section, phone_number_key: error_message},
-        }
+    phone_number = form_answers()["contact_details"].get(phone_number_key, "")
+    if phone_number and is_valid_uk_number(phone_number) is False:
+        error_message = "Enter a telephone number, like 020 7946 0000, 07700900000 or +44 0808 157 0192"
+        set_phone_number_error(error_message, phone_number_key, section_key)
         return False
     return True
+
+
+def validate_uk_mobile_phone_number_if_present(section_key, phone_number_key):
+    phone_number = form_answers()["contact_details"].get(phone_number_key, "")
+    if phone_number and is_valid_uk_mobile_number(phone_number) is False:
+        error_message = "Enter a UK mobile number, like 07700 900 000 or +44 7700 900000"
+        set_phone_number_error(error_message, phone_number_key, section_key)
+        return False
+    return True
+
+
+def is_valid_uk_number(phone_number):
+    try:
+        parse_phonenumber(phone_number, region="GB")
+    except phonenumbers.NumberParseException:
+        return False
+    return True
+
+
+def is_valid_uk_mobile_number(phone_number):
+    if is_valid_uk_number(phone_number):
+        phone_number_obj = parse_phonenumber(phone_number, region="GB")
+        return carrier._is_mobile(number_type(phone_number_obj))
+
+
+def set_phone_number_error(error_message, phone_number_key, section_key):
+    error_section = session.setdefault("error_items", {}).get(section_key, {})
+    session["error_items"] = {
+        **session.setdefault("error_items", {}),
+        section_key: {**error_section, phone_number_key: error_message},
+    }
 
 
 def validate_email_if_present(section_key, email_key):
@@ -316,7 +342,7 @@ def validate_contact_details(section_key):
         [
             validate_email_if_present(section_key, "email"),
             validate_phone_number_if_present(section_key, "phone_number_calls"),
-            validate_phone_number_if_present(section_key, "phone_number_texts"),
+            validate_uk_mobile_phone_number_if_present (section_key, "phone_number_texts"),
         ]
     )
     return value
