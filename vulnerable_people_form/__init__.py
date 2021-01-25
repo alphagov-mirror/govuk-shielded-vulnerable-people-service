@@ -81,8 +81,6 @@ def create_app(scriptinfo):
 
     persistence.init_app(app)
 
-    app.is_tiering_logic_enabled = "TIERING_LOGIC" in app.config and app.config["TIERING_LOGIC"] == "True"
-
     app.shielding_advice = ladcode_shielding_advice_lookup.LocalAuthorityShielding(
             _get_shielding_advice_data_path(app.config['ENVIRONMENT']))
 
