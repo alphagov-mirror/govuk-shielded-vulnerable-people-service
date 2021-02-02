@@ -23,8 +23,9 @@ Feature: COVID-19 Shielded vulnerable people service - basic e2e user journey - 
 	Then I am redirected to the "address-lookup?la=1" page
     
     Scenario: Should be redirected to shopping assistance when an address is selected
-        Given I am on the "address-lookup?la=1" page
-        When I submit the form
+	Given I am on the "address-lookup?la=1" page
+	When I select the first address	
+        And I submit the form
         Then I am redirected to the "nhs-letter?la=1" page
 
     Scenario: Should be re-directed to nhs number when yes answered to told to shield
@@ -64,7 +65,7 @@ Feature: COVID-19 Shielded vulnerable people service - basic e2e user journey - 
     Scenario: Should be redirected to basic care needs when yes answered to priority shopping deliveries
         Given I am on the "priority-supermarket-deliveries?la=1" page
         When I click the ".govuk-radios__item input[value='1']" element
-        And I submit the form
+	And I submit the form
         Then I am redirected to the "basic-care-needs?la=1" page
 
     Scenario: Should be redirected to contact details when no answered to basic care needs help

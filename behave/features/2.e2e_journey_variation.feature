@@ -23,8 +23,9 @@ Feature: COVID-19 Shielded vulnerable people service - basic e2e user journey - 
 	Then I am redirected to the "address-lookup" page
 
     Scenario: Should be redirected to shopping assistance when an address is selected
-        Given I am on the "address-lookup" page
-        When I submit the form
+	Given I am on the "address-lookup" page
+	When I select the first address	
+        And I submit the form
         Then I am redirected to the "nhs-letter" page
 
     Scenario: Should be re-directed to nhs number when yes answered to told to shield
